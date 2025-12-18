@@ -1,10 +1,8 @@
-# login.py
 import tkinter as tk
 from tkinter import messagebox
 import requests
 import system
 
-# URL ต้องเป๊ะ (ไม่มี / ต่อท้าย)
 API_URL = "https://api-key.runaesike.online/verify"
 
 def login_screen():
@@ -18,16 +16,9 @@ def login_screen():
         if not key:
             messagebox.showwarning("Warning", "กรุณากรอก License Key")
             return
-
         try:
-            # เพิ่ม headers เพื่อจำลองว่าเป็น Browser (บาง Server บล็อก Python User-Agent)
             headers = {'User-Agent': 'Mozilla/5.0'}
-            
-            # verify=True คือตรวจสอบ SSL (มาตรฐาน)
-            # ถ้ายัง Error ลองเปลี่ยนเป็น verify=False ดู (แต่ไม่แนะนำสำหรับ Production)
             response = requests.post(API_URL, json={"key": key}, headers=headers, timeout=10)
-            
-            # เช็คว่า Server ตอบกลับมาเป็น JSON หรือไม่
             try:
                 data = response.json()
             except:
@@ -45,17 +36,12 @@ def login_screen():
             messagebox.showerror("Connection Error", "ไม่สามารถติดต่อ Server ได้\nตรวจสอบอินเทอร์เน็ต หรือ Server อาจจะล่ม")
         except Exception as e:
             messagebox.showerror("Error", f"เกิดข้อผิดพลาด: {str(e)}")
-
-    # ... (ส่วน UI เหมือนเดิม) ...
     tk.Label(window, text="LICENSE VERIFICATION", font=("Arial", 14, "bold"), bg="#121212", fg="#00e5ff").pack(pady=20)
-    
     tk.Label(window, text="ใส่รหัสเพื่อปลดล็อกโปรแกรม:", bg="#121212", fg="white").pack()
     entry_key = tk.Entry(window, font=("Arial", 12), width=30, justify='center')
     entry_key.pack(pady=10)
-
     btn_login = tk.Button(window, text="ENTER SYSTEM", command=check_key, bg="#4CAF50", fg="white", font=("Arial", 10, "bold"), width=20, height=2)
     btn_login.pack(pady=20)
-
     tk.Label(window, text="© Runaeshike Official", bg="#121212", fg="#444", font=("Arial", 8)).pack(side="bottom", pady=5)
 
     window.mainloop()
